@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUserStart, updateUserSuccess, UpdateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from '../redux/user/userSlice';
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -69,14 +69,14 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(UpdateUserFailure(data.message));
+        dispatch(updateUserFailure(data.message));
         return;
       }
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {
-      dispatch(UpdateUserFailure(error.message));
+      dispatch(updateUserFailure(error.message));
     }
   };
 
@@ -103,10 +103,12 @@ export default function Profile() {
       const res = await fetch('/api/auth/signout');
       const data = await res.json();
       if (data.success === false ){
+        dispatch(deleteUserFailure(data.message));
         return;
       }
+      dispatch(deleteUserSuccess(data));
     } catch (error) {
-      
+      dispatch(deleteUserFailure(data.message));
     }
   }
 
@@ -137,11 +139,11 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
-        <span onClick={handleSignout} className="text-red-700 cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
 
       <p className='text-red-700 mt-5'>{error ? error: ''}</p>
-      <p className='text-green-700 mt-5'>{updateSuccess ? 'Success' : 'User is updated successfully!' }</p>
+      <p className='text-green-700 mt-5'>{updateSuccess ? 'User is updated successfully!' : '' }</p>
     </div>
   )
 }
