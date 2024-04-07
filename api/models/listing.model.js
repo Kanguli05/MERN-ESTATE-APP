@@ -1,4 +1,4 @@
-import { mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const listingSchema = new mongoose.Schema(
     {
@@ -15,11 +15,11 @@ const listingSchema = new mongoose.Schema(
             required: true,
         },
         regularPrice: {
-            type: String,
+            type: Number,
             required: true,
         },
         discountPrice: {
-            type: String,
+            type: Number,
             required: true,
         },
         bathrooms: {
