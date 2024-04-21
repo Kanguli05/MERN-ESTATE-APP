@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 
 export default function CreateListing() {
     const {currentUser} =  useSelector((state) => state.user);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [files, setFiles] = useState([]);
     const [formData, setFormData] = useState({
         imageUrls: [],
@@ -79,7 +79,7 @@ export default function CreateListing() {
     const handleRemoveImage = (index) => {
         setFormData({
             ...formData, imageUrls: formData.imageUrls.filter((_, i) => i !==index),
-        })
+        });
     }
 
     const handleChange = (e) => {
@@ -87,7 +87,7 @@ export default function CreateListing() {
             setFormData({
                 ...formData,
                 type: e.target.id
-            })
+            });
         }
 
         if (e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer') {
@@ -119,7 +119,7 @@ export default function CreateListing() {
                 },
                 body: JSON.stringify({
                     ...formData,
-                    userRef: updateCurrentUser._id,
+                    userRef: currentUser._id,
                 }),
             });
             const data = await res.json();

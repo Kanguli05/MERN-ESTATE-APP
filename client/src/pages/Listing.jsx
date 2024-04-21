@@ -25,12 +25,12 @@ export default function Listing() {
     const params = useParams();
     const {currentUser} = useSelector((state) => state.user);
 
-    console.log(currentUser._id, listing?.userRef);
+
     useEffect(()=>{
         const fetchListing = async () => {
             try {
                 setLoading(true);
-                const res = await fetch('/api/listing/get/${params.listingId}')
+                const res = await fetch(`/api/listing/get/${params.listingId}`);
                 const data = await res.json();
                 if (data.success === false) {
                     setError(true);

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteListing } from '../../../api/controllers/listing.controller';
 import ListingItem from '../components/ListingItem';
 
 export default function Search() {
@@ -60,7 +59,7 @@ export default function Search() {
             const data = await res.json();
             if(data.length > 8){
               setShowMore(true);
-            }else{
+            } else{
                 setShowMore(false);
             }
             setListings(data);
@@ -70,8 +69,6 @@ export default function Search() {
 
         fetchListings();
     }, [location.search]);
-
-    console.log(sidebardata);
 
     const handleChange = (e) => {
 

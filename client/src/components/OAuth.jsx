@@ -9,10 +9,10 @@ export default function OAuth() {
     const navigate = useNavigate();
     const handleGoogleClick = async () => {
         try {
-            const provider = new GoogleAuthProvider()
-            const auth = getAuth(app)
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth(app);
 
-            const result = await signInWithPopup(auth, provider)
+            const result = await signInWithPopup(auth, provider);
 
             const res = await fetch('/api/auth/google', {
                 method: 'POST',
