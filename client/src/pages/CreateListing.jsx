@@ -107,11 +107,13 @@ export default function CreateListing() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(false);
+        setLoading(true);
+            
         try {
             if (formData.imageUrls.length < 1) return setError('You must upload atleast one image');
             if (+formData.regularPrice < +formData.discountPrice) return setError('Discount price must be lower than regular price');
-            setLoading(true);
-            setError(false);
+            
             const res = await fetch('/api/listing/create', {
                 method: 'POST',
                 headers: {
@@ -131,6 +133,7 @@ export default function CreateListing() {
 
         } catch (error) {
            setError (error.message);
+        } finally {
            setLoading(false);
         }
     };
