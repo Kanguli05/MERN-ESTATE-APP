@@ -43,6 +43,7 @@ export default function CreateListing() {
             })
             .catch((err) => {
                 setImageUploadError('Image Upload failed (2mb max per Image)');
+            } finally {
                 setUploading(false);
             });
         }else{
@@ -107,7 +108,7 @@ export default function CreateListing() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(false);
+        setError('');
         setLoading(true);
             
         try {
@@ -121,15 +122,17 @@ export default function CreateListing() {
                 },
                 body: JSON.stringify({
                     ...formData,
-                    userRef: currentUser._id,
+                    userRef: currentUser?._id,
                 }),
             });
             const data = await res.json();
             setLoading(false);
-            if (data.success === false) {
+            if (!data.success) {
                 setError(data.message);
-            }
-            navigate(`/listing/${data._id}`)
+            } else {
+                setFormData(prev => ({ ...prev, imagesUrls: [] }));
+                setFiles([]);
+                navigate(`/listing/${data._id}`)
 
         } catch (error) {
            setError (error.message);
