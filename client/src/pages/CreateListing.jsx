@@ -43,7 +43,6 @@ export default function CreateListing() {
             })
             .catch((err) => {
                 setImageUploadError('Image Upload failed (2mb max per Image)');
-            } finally {
                 setUploading(false);
             });
         }else{
@@ -133,6 +132,7 @@ export default function CreateListing() {
                 setFormData(prev => ({ ...prev, imagesUrls: [] }));
                 setFiles([]);
                 navigate(`/listing/${data._id}`)
+            }
 
         } catch (error) {
            setError (error.message);
@@ -140,6 +140,7 @@ export default function CreateListing() {
            setLoading(false);
         }
     };
+    
 
   return (
     <main className='p-3 max-w-4xl mx-auto'>
