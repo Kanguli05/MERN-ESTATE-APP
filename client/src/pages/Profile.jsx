@@ -80,7 +80,7 @@ export default function Profile() {
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
-  };
+  }
 
   const handleDeleteUser = async () => {
     try {
@@ -88,11 +88,14 @@ export default function Profile() {
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
       });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
-        return;
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        dispatch(deleteUserFailure(errorData.message || 'Failed to delete User!'));
+        return;  
       }
+      const data = await res.json();
+      
       dispatch(deleteUserSuccess(data));
     } catch (error) {
       dispatch(deleteUserFailure(error.message))
