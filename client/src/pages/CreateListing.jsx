@@ -43,6 +43,7 @@ export default function CreateListing() {
             })
             .catch((err) => {
                 setImageUploadError('Image Upload failed (2mb max per Image)');
+            } finally {
                 setUploading(false);
             });
         }else{
@@ -107,11 +108,13 @@ export default function CreateListing() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
+            
         try {
             if (formData.imageUrls.length < 1) return setError('You must upload atleast one image');
             if (+formData.regularPrice < +formData.discountPrice) return setError('Discount price must be lower than regular price');
-            setLoading(true);
-            setError(false);
+            
             const res = await fetch('/api/listing/create', {
                 method: 'POST',
                 headers: {
@@ -119,18 +122,21 @@ export default function CreateListing() {
                 },
                 body: JSON.stringify({
                     ...formData,
-                    userRef: currentUser._id,
+                    userRef: currentUser?._id,
                 }),
             });
             const data = await res.json();
             setLoading(false);
-            if (data.success === false) {
+            if (!data.success) {
                 setError(data.message);
-            }
-            navigate(`/listing/${data._id}`)
+            } else {
+                setFormData(prev => ({ ...prev, imagesUrls: [] }));
+                setFiles([]);
+                navigate(`/listing/${data._id}`)
 
         } catch (error) {
            setError (error.message);
+        } finally {
            setLoading(false);
         }
     };
@@ -214,7 +220,7 @@ export default function CreateListing() {
                             <button type='button' disabled={uploading} onClick={() => handleRemoveImage(index)} className='p-3 text-red-700 rounded-lg uppercase hover:opacity-95'>Delete</button>
                         </div>
                     ))
-                };
+                }
                 <button disabled={loading || uploading} className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'> {loading ? 'Creating...': 'Create listing'} </button>
                 {error && <p className='text-red-700 text-sm'>{error}</p>}
             </div>

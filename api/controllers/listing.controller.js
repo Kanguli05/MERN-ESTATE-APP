@@ -1,13 +1,20 @@
 import Listing from "../models/listing.model.js";
 import { errorHandler } from "../utils/error.js";
+import { validationResult } from "express-validator";
 
 
 export const createListing = async (req, res, next) => {
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    
     try {
         const listing = await Listing.create(req.body);
         return res.status(201).json(listing);
     } catch (error) {
+        console.error(error);
         next(error);
     }
 };

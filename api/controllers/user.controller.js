@@ -22,16 +22,23 @@ export const updateUser =  async (req, res, next) => {
             $set: {
                 username: req.body.username,
                 email: req.body.email,
-                password: req.body.password,
+                ...(req.body.password && { password: req.body.password }),
                 avatar: req.body.avatar,
             }
-        }, {new:true} )
+        }, {new:true} );
+
+        if(!updateUser) {
+            return next(errorHandler(404, "User not Found!"));
+        }
 
         const {password, ...others} = updatedUser._doc;
 
+
         res.status(200).json("User has been updated!");
+
     } catch (error) {
-        next(error)
+        console.log(error);
+        next(error);
     }
 };
 
